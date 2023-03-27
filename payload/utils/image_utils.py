@@ -2,7 +2,7 @@
 Author: 七画一只妖 1157529280@qq.com
 Date: 2022-12-09 09:15:45
 LastEditors: 七画一只妖 1157529280@qq.com
-LastEditTime: 2022-12-09 11:12:33
+LastEditTime: 2023-03-27 12:09:54
 '''
 from pathlib import Path
 from PIL import Image, ImageFont, ImageDraw, ImageMath
@@ -113,7 +113,13 @@ def write_sh(font_entity: FontEntity, img: Image, text: str, dis: tuple = None, 
 
 def write_longsh(font_entity: FontEntity, img:Image, text: str, mode: str = "C", dis: tuple = (0, 0)) -> Image:
     font = ImageFont.truetype(font_entity.ttf_path, font_entity.fsize)
-
+    """
+    说明: 在图片上长文本
+    font_entity: 字体对象
+    img: 图片对象
+    dis: AlignLeft模式中的上下左右边距, Center模式中为None则代表左右居中, 不为空则代表上边距
+    mode: 模式,可选模式有AlignLeft、Center
+    """
     # 文字、图片预处理
     text = text.strip().split("\n")
     draw = ImageDraw.Draw(img)
