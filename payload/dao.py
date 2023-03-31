@@ -2,7 +2,7 @@
 Author: 七画一只妖 1157529280@qq.com
 Date: 2023-03-27 10:45:06
 LastEditors: 七画一只妖 1157529280@qq.com
-LastEditTime: 2023-03-31 13:25:49
+LastEditTime: 2023-03-31 21:29:42
 '''
 from PIL import Image, ImageDraw, ImageFont
 from pathlib import Path
@@ -29,7 +29,8 @@ async def get_data(date: str = None):
     if date == None:
         now = datetime.datetime.now().strftime("%Y-%m-%d")
         now_time = datetime.datetime.strptime(now, "%Y-%m-%d").date()
-        latest_time = datetime.datetime.strptime(FIGHT_LIST[-1], "%Y-%m-%d").date()
+        latest_time = datetime.datetime.strptime(
+            FIGHT_LIST[-1], "%Y-%m-%d").date()
         if latest_time > now_time:
             date = now
         else:
@@ -117,7 +118,8 @@ async def get_data_total():
                     }}
                 )
             else:
-                total_data[item["user_name"]]["damage_total"] += item["damage_total"]
+                total_data[item["user_name"]
+                           ]["damage_total"] += item["damage_total"]
                 total_data[item["user_name"]]["fight_total"] += fight_total
 
     total_data = sorted(total_data.items(),
@@ -173,9 +175,9 @@ def _get_max_size(text: str) -> tuple:
 
 
 async def get_rate():
-    resp_data:dict = await f_get_rate_data()
+    resp_data: dict = await f_get_rate_data()
 
-    image_size = (500, 170)
+    image_size = (550, 170)
     font = ImageFont.truetype(FONT_PATH, size=15)
 
     # Create image and drawing object
@@ -183,20 +185,25 @@ async def get_rate():
     draw = ImageDraw.Draw(image)
 
     # Define table headers
-    headers = ['BOSS名称', '等级', '属性', '总血量', '当前血量']
+    headers = ['BOSS名称', '等级', '属性', '总血量', '当前血量', "百分比"]
 
     # Define table data
     # data = [['九尾狐佳岚', '66', '光', '2640000', '2640000'],
     #         ['宰相邓肯', '66', '暗', '2640000', '2640000']]
 
     # 数据转换
-    data:list = []
+    data: list = []
     for item in resp_data["boss"]:
-        data_item = [str(item["name"]), str(item["level"]), item["elemental_type_cn"], str(item["total_hp"]), str(item["remain_hp"])]
+        data_item = [str(item["name"]),
+                     str(item["level"]),
+                     item["elemental_type_cn"],
+                     str(item["total_hp"]),
+                     str(item["remain_hp"]),
+                     _percentage(item["remain_hp"],item["total_hp"])]
         data.append(data_item)
 
     # Define column widths
-    col_widths = [120, 50, 60, 120, 120]
+    col_widths = [120, 40, 40, 120, 120, 40]
 
     # Draw table headers
     x_pos = 10
@@ -218,4 +225,9 @@ async def get_rate():
     save_path = f"{BASE_PATH}\\cache\\rate.jpg"
     image.save(save_path)
     return save_path
-    
+
+
+def _percentage(smaller, bigger):
+    if smaller == 0:
+        return '0.00%'
+    return '{:.2%}'.format(float(smaller) / float(bigger))
