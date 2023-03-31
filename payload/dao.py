@@ -2,7 +2,7 @@
 Author: 七画一只妖 1157529280@qq.com
 Date: 2023-03-27 10:45:06
 LastEditors: 七画一只妖 1157529280@qq.com
-LastEditTime: 2023-03-31 21:29:42
+LastEditTime: 2023-03-31 22:22:34
 '''
 from PIL import Image, ImageDraw, ImageFont
 from pathlib import Path
@@ -26,64 +26,56 @@ async def get_data(date: str = None):
     返回:图片路径
     """
 
-    if date == None:
+    if date is None:
         now = datetime.datetime.now().strftime("%Y-%m-%d")
         now_time = datetime.datetime.strptime(now, "%Y-%m-%d").date()
-        latest_time = datetime.datetime.strptime(
-            FIGHT_LIST[-1], "%Y-%m-%d").date()
-        if latest_time > now_time:
-            date = now
-        else:
-            date = latest_time
+        latest_time = datetime.datetime.strptime(FIGHT_LIST[-1], "%Y-%m-%d").date()
+        date = now if latest_time > now_time else latest_time
+
 
     d_data: dict = await f_get_damage_data(date)
 
     # 数据整合（生成排版文字）
-    text = f"===今日数据（{date}）===\n\n\n"
-    index = 1
+    text1 = f"""===今日数据（{date}，第1-10名）===\n\n"""
+    text2 = f"""===今日数据（{date}，第11-20名）===\n\n"""
+    text3 = f"""===今日数据（{date}，第21-30名）===\n\n"""
     d_data = data_format(d_data)
-    for item in sorted(d_data, key=lambda i: i["damage_total"], reverse=True):
-        text += f"""{index}.{item["user_name"]}(|出刀次数|/3) 总伤害：{item["damage_total"]}\n"""
-        d_index = 1
-        fight_total = 0
-        for d_tiem in item["damage_list"]:
-            text += f""">>>>>{d_tiem["boss_name"]:>5}   {d_tiem["damage"]}\n"""
-            if d_tiem["is_kill"] == 1:
-                fight_total += 1
-            else:
-                fight_total += 2
-            d_index += 1
-        # 补偿刀判断
-        if fight_total > 6:
-            fight_total = 6
-        fight_total = format(fight_total * 0.5, ".1f")
-        if fight_total in ["0.0", "1.0", "2.0", "3.0"]:
-            fight_total = fight_total[0]
-        text = text.replace("|出刀次数|", str(fight_total))
-        index += 1
-        text += "\n\n"
+    for index, item in enumerate(sorted(d_data, key=lambda i: i["damage_total"], reverse=True), 1):
+        fight_total = sum([1 if d_tiem["is_kill"] == 1 else 2 for d_tiem in item["damage_list"]])
+        fight_total = min(fight_total, 6) * 0.5
+        if fight_total in [0, 1, 2, 3]:
+            fight_total = int(fight_total)
+        if index <= 10:
+            text1 += f"""{index}.{item["user_name"]}({fight_total}/3) 总伤害：{item["damage_total"]}\n"""
+            for d_tiem in item["damage_list"]:
+                text1 += f""">     {d_tiem["boss_name"]:>5}   {d_tiem["damage"]}\n"""
+            text1 += ">\n"
+        elif 11 <= index <= 20:
+            text2 += f"""{index}.{item["user_name"]}({fight_total}/3) 总伤害：{item["damage_total"]}\n"""
+            for d_tiem in item["damage_list"]:
+                text2 += f""">     {d_tiem["boss_name"]:>5}   {d_tiem["damage"]}\n"""
+            text2 += ">\n"
+        elif 21 <= index <= 30:
+            text3 += f"""{index}.{item["user_name"]}({fight_total}/3) 总伤害：{item["damage_total"]}\n"""
+            for d_tiem in item["damage_list"]:
+                text3 += f""">     {d_tiem["boss_name"]:>5}   {d_tiem["damage"]}\n"""
+            text3 += ">\n"
+        else:
+            break
 
     # 图像处理
-    fsize = 20
-    font = FontEntity(fsize=fsize, ttf_path=FONT_PATH)
+    FONTSIZE = 18
+    font = FontEntity(fsize=FONTSIZE, ttf_path=FONT_PATH)
 
-    # 计算高度
-    line, max_text = _get_max_size(text)
-    dis = (50, 50)
-
-    _f = ImageFont.truetype(FONT_PATH, 20)
-    width, _ = _f.getsize(max_text)
-
-    page_height = int((dis[0] * 2 + fsize * line) * 1.1)
-    page_width = int((dis[1] * 2 + width) * 1.1)
-
-    text.split("#")
-    bg = Image.new("RGB", (page_width, page_height), (255, 255, 255))
-    image = write_longsh(font_entity=font, img=bg,
-                         text=text, dis=dis, mode="L")
+    bg = Image.new("RGB", (1500, 1500), (255, 255, 255))
+    image = write_longsh(font_entity=font, img=bg, text=text1, dis=(50, 50), mode="L")
+    image2 = write_longsh(font_entity=font, img=image, text=text2, dis=(500, 50), mode="L")
+    image3 = write_longsh(font_entity=font, img=image2, text=text3, dis=(950, 50), mode="L")
     save_path = f"{BASE_PATH}\\cache\\daily_damage.jpg"
-    image.save(save_path)
+    with open(save_path, "wb") as f:
+        image3.save(f)
     return save_path
+
 
 
 # 获取伤害总榜以及出刀数
