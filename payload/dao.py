@@ -2,7 +2,7 @@
 Author: 七画一只妖 1157529280@qq.com
 Date: 2023-03-27 10:45:06
 LastEditors: 七画一只妖 1157529280@qq.com
-LastEditTime: 2023-03-31 09:55:00
+LastEditTime: 2023-03-31 13:25:49
 '''
 from PIL import Image, ImageDraw, ImageFont
 from pathlib import Path
@@ -18,13 +18,22 @@ FONT_PATH = f"{BASE_PATH}\\ttf\\yuanshen.ttf"
 
 
 # 获取当日出刀表图
-async def get_data(date: str = FIGHT_LIST[-1]):
+async def get_data(date: str = None):
     """
     获取指定日期的出刀图，如果为空则为当日的出刀
     注意:在会战日期之外必须传日期
     date:日期（xxxx-xx-xx）
     返回:图片路径
     """
+
+    if date == None:
+        now = datetime.datetime.now().strftime("%Y-%m-%d")
+        now_time = datetime.datetime.strptime(now, "%Y-%m-%d").date()
+        latest_time = datetime.datetime.strptime(FIGHT_LIST[-1], "%Y-%m-%d").date()
+        if latest_time > now_time:
+            date = now
+        else:
+            date = latest_time
 
     d_data: dict = await f_get_damage_data(date)
 

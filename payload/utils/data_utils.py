@@ -30,5 +30,9 @@ def _data_format(name):
         "暗影魔王":"暗影",
         "boss_harvester_guild_fury":"蚊子",
         "boss_graboid_guild_fury":"沙虫",
+        "boss_nine_tailed_fox_guild":"九尾",
+        "boss_robot_knight_new_guild":"大锤",
+        "boss_minister_guild":"邓肯",
+        "雪人将军盖斯特":"雪人"
     }
     return data[name]
