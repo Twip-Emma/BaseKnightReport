@@ -2,7 +2,7 @@
 Author: 七画一只妖 1157529280@qq.com
 Date: 2023-03-27 10:45:06
 LastEditors: 七画一只妖 1157529280@qq.com
-LastEditTime: 2023-03-31 22:22:34
+LastEditTime: 2023-04-04 10:50:04
 '''
 from PIL import Image, ImageDraw, ImageFont
 from pathlib import Path
@@ -185,7 +185,7 @@ async def get_rate():
 
     # 数据转换
     data: list = []
-    for item in resp_data["boss"]:
+    for item in resp_data["boss"][-4:]:
         data_item = [str(item["name"]),
                      str(item["level"]),
                      item["elemental_type_cn"],
