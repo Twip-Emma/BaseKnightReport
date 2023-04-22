@@ -2,7 +2,7 @@
 Author: 七画一只妖 1157529280@qq.com
 Date: 2023-03-27 09:01:10
 LastEditors: 七画一只妖 1157529280@qq.com
-LastEditTime: 2023-04-14 23:09:28
+LastEditTime: 2023-04-21 17:14:12
 FilePath: \060坎公骑冠剑会战工具\main.py
 Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 '''
@@ -24,10 +24,10 @@ loop = asyncio.get_event_loop()
 # print(loop.run_until_complete(dao.get_rate()))
 
 # 获取出刀总数统计表的图片
-print(loop.run_until_complete(dao.get_dao_total_image()))
+# print(loop.run_until_complete(dao.get_dao_total_image()))
 
 # 总共
-print(loop.run_until_complete(dao.get_dao_daily_image()))
+# print(loop.run_until_complete(dao.get_dao_daily_image()))
 
 # 总榜
-print(loop.run_until_complete(dao.get_dao_damage_total_image()))
+# print(loop.run_until_complete(dao.get_dao_damage_total_image()))
