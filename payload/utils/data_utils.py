@@ -41,6 +41,9 @@ def _data_format(name):
         "妖精":"妖精",
         "春秋派首领":"春秋",
         "哥布林族长":"族长",
-        "侵略军司令官":"司令"
+        "侵略军司令官":"司令",
+        "boss_mech_guild_fury_43th":"熊猫",
+        "boss_admiral_guild_43th_modified":"船长",
+        "boss_portrait_guild_43th":"画像"
     }
     return data[name]
