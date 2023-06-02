@@ -2,7 +2,7 @@
 Author: 七画一只妖 1157529280@qq.com
 Date: 2023-03-27 09:55:54
 LastEditors: 七画一只妖 1157529280@qq.com
-LastEditTime: 2023-04-21 17:12:49
+LastEditTime: 2023-06-02 19:00:43
 '''
 import json
 
@@ -44,6 +44,9 @@ def _data_format(name):
         "侵略军司令官":"司令",
         "boss_mech_guild_fury_43th":"熊猫",
         "boss_admiral_guild_43th_modified":"船长",
-        "boss_portrait_guild_43th":"画像"
+        "boss_portrait_guild_43th":"画像",
+        "boss_invader_director_guild":"导演",
+        "机械人艾瑞娜":"奶奶",
+        "愤怒的牛头人":"牛头"
     }
     return data[name]
