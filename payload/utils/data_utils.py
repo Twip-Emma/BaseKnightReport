@@ -2,7 +2,7 @@
 Author: 七画一只妖 1157529280@qq.com
 Date: 2023-03-27 09:55:54
 LastEditors: 七画一只妖 1157529280@qq.com
-LastEditTime: 2023-06-02 19:00:43
+LastEditTime: 2023-06-24 13:00:31
 '''
 import json
 
@@ -18,7 +18,7 @@ def save_data(path: str, data: dict) -> None:
 
 
 def data_format(data):
-    for item in data:
+    for item in data["info"]:
         for d_item in item["damage_list"]:
             d_item["boss_name"] = _data_format(d_item["boss_name"])
     return data
@@ -47,6 +47,7 @@ def _data_format(name):
         "boss_portrait_guild_43th":"画像",
         "boss_invader_director_guild":"导演",
         "机械人艾瑞娜":"奶奶",
-        "愤怒的牛头人":"牛头"
+        "愤怒的牛头人":"牛头",
+        "熔岩史莱姆国王":"史莱姆"
     }
     return data[name]
